@@ -65,4 +65,27 @@
         app:layout_constraintStart_toStartOf="@+id/left_button"
         app:layout_constraintTop_toBottomOf="@+id/left_button" />
 
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:onClick="ListOfActiveApps"
+        android:text="List_A"
+        app:layout_constraintStart_toStartOf="@+id/right_button"
+        app:layout_constraintTop_toBottomOf="@+id/right_button" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:onClick="lunchService"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="@+id/button"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/button"
+        app:layout_constraintTop_toBottomOf="@+id/button" />
+
 </android.support.constraint.ConstraintLayout>
