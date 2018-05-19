@@ -10,6 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,44 +31,78 @@ public class AppsListActivity extends AppCompatActivity {
 //    }
 
     List<AppList> selectedIteams = new ArrayList<>();
+    //
+    ListView userInstalledApps;
+    AppAdapter installedAppAdapter;
+    //
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apps_list);
 
-        final ListView userInstalledApps = (ListView)findViewById(R.id.installed_app_list);
+        userInstalledApps = (ListView)findViewById(R.id.installed_app_list);
         //
         userInstalledApps.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
 
         //
         final List<AppList> installedApps = getInstalledApps();
         Collections.sort(installedApps);
         //
+
         //selectedIteams=installedApps;
         //
-        AppAdapter installedAppAdapter = new AppAdapter(AppsListActivity.this, installedApps);
+        installedAppAdapter = new AppAdapter(AppsListActivity.this, installedApps);
+
         userInstalledApps.setAdapter(installedAppAdapter);
+        //
+
+        //
         userInstalledApps.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //
+
+                //
                 //Toast.makeText(AppsListActivity.this, position, Toast.LENGTH_SHORT);
-                AppList selectedIteam=  installedApps.get(position); //.getItemAtPosition(position);
+                AppList appList=(AppList)installedAppAdapter.getItem(position);
+//                AppList appList = (AppList) ap
+                appList.toogleChecked();
+                AppAdapter.ViewHolder viewHolder= (AppAdapter.ViewHolder)view.getTag();
+                viewHolder.checkBoxInListView.setChecked(appList.isChecked());
+                Log.wtf("AppsListActivity",appList.getName());
+
+
+                //AppList selectedIteam=  installedApps.get(position); //.getItemAtPosition(position);
+
+//                viewHolder.checkBoxInListView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                    @Override
+//                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                        Log.wtf("AppsListActivity","sadsaddsadsa");
+//                    }
+//                });
+
                 //AppList selectedIteam2 = (AppList) findViewById(R.id.textView);
-                Log.wtf("AppsListActivity",selectedIteam.toString());
+//                Log.wtf("AppsListActivity",selectedIteam.toString());
                 Log.wtf("AppsListActivity",""+position+" "+id);
                 System.out.print(position+" "+id);
-                //AppList selectedIteam = view.findViewById(position);
+
+                TextView tv = (TextView)findViewById(R.id.textView4);
+                tv.setText("ok");
+
+                AppList selectedIteam = appList;
                 if(selectedIteams.contains(selectedIteam)){
                     selectedIteams.remove(selectedIteam);
-                    userInstalledApps.setItemChecked(position,false);
-                    Log.wtf(""+position,""+userInstalledApps.isItemChecked(position));
+//                    userInstalledApps.setItemChecked(position,false);
+//                    Log.wtf(""+position,""+userInstalledApps.isItemChecked(position));
 //                    userInstalledApps.refreshDrawableState();
                     //todo: uncheck iteam - może się nie restertuje widok...nie wiem...
                 }
                 else {
                     selectedIteams.add(selectedIteam);
-                    userInstalledApps.setItemChecked(position,true);
-                    Log.wtf(""+position,""+userInstalledApps.isItemChecked(position));
+//                    userInstalledApps.setItemChecked(position,true);
+//                    Log.wtf(""+position,""+userInstalledApps.isItemChecked(position));
                     view.invalidate();
 //                    userInstalledApps.refreshDrawableState();
                     //todo: check iteam - może się nie restertuje widok...nie wiem...
@@ -77,9 +113,15 @@ public class AppsListActivity extends AppCompatActivity {
 
     public void showSelectedIteams() {
         String iteams="";
-        for(AppList iteam:selectedIteams) {
-            iteams+="-"+iteam.toString()+"\n";
+        for(int i=0;i<userInstalledApps.getAdapter().getCount();i++) {
+            AppList appList  =((AppList)userInstalledApps.getAdapter().getItem(i));
+            if(appList.isChecked()==true) {
+                iteams += "-" + appList.toString() + "\n";
+            }
         }
+//        for(AppList iteam:selectedIteams) {
+//            iteams+="-"+iteam.toString()+"\n";
+//        }
         Toast.makeText(this,iteams,Toast.LENGTH_LONG).show();
     }
 
@@ -112,8 +154,9 @@ public class AppsListActivity extends AppCompatActivity {
             PackageInfo p = packs.get(i);
             if ((isSystemPackage(p) == false)) {
                 String appName = p.applicationInfo.loadLabel(getPackageManager()).toString();
+                String packageName = p.applicationInfo.packageName;
                 Drawable icon = p.applicationInfo.loadIcon(getPackageManager());
-                res.add(new AppList(appName, icon));
+                res.add(new AppList(appName, icon,packageName));
             }
         }
         return res;

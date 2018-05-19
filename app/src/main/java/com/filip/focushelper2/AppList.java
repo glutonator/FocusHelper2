@@ -7,10 +7,27 @@ import java.util.Objects;
 public class AppList implements Comparable {
     private String name;
     Drawable icon;
+    private String packageName;
+    //
+    private boolean checked = false;
+    ///
 
     public AppList(String name, Drawable icon) {
         this.name = name;
         this.icon = icon;
+    }
+
+    public AppList(String name, Drawable icon, String packageName) {
+        this.name = name;
+        this.icon = icon;
+        this.packageName = packageName;
+    }
+
+    public AppList(String name, Drawable icon, String packageName, boolean checked) {
+        this.name = name;
+        this.icon = icon;
+        this.packageName = packageName;
+        this.checked = checked;
     }
 
     public String getName() {
@@ -19,6 +36,34 @@ public class AppList implements Comparable {
 
     public Drawable getIcon() {
         return icon;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setIcon(Drawable icon) {
+        this.icon = icon;
+    }
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
+    public void toogleChecked() {
+        this.checked=!this.checked;
     }
 
     @Override

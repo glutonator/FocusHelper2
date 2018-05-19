@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,9 +53,11 @@ public class MonitoringService extends IntentService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         final List<String> stalkList = new ArrayList<>();
-        stalkList.add("com.filip.focushelper2");
+//        stalkList.add("com.filip.focushelper2");
         stalkList.add("com.facebook.orca");
         stalkList.add("com.facebook.katana");
+        stalkList.add("com.instagram.android");
+
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
 
@@ -62,33 +65,45 @@ public class MonitoringService extends IntentService {
                 final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
                 final List<ActivityManager.RunningTaskInfo> services = activityManager.getRunningTasks(Integer.MAX_VALUE);
                 //
-                func();
+                String AcctiveAppStr = func();
                 sharedPrefsapp = getApplicationContext().getSharedPreferences("appdb", Context.MODE_PRIVATE);
                 allEntries = null;
                 allEntries = sharedPrefsapp.getAll();
+
+                for (String blockedAppStr : stalkList) {
+                    if (blockedAppStr.equals(AcctiveAppStr)) {
+                        Log.wtf("procInfos", "Usuwanie:  " + AcctiveAppStr);
+                        Intent intent = new Intent(getBaseContext(), BlockDisplayActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+
+                        activityManager.killBackgroundProcesses("AcctiveAppStr");
+                    }
+                }
+
                 //
 
 
-                for (int i = 0; i < services.size(); i++) {
-                    Log.wtf("servisy", services.toString());
-                    if (!stalkList.contains(services.get(i).baseActivity.getPackageName())) {
-                        // you may broad cast a new application launch here.
-                        stalkList.add(services.get(i).baseActivity.getPackageName());
-                    }
-                }
-
-                List<ActivityManager.RunningAppProcessInfo> procInfos = activityManager.getRunningAppProcesses();
-
-                for (int i = 0; i < procInfos.size(); i++) {
-
-                    ArrayList<String> runningPkgs = new ArrayList<String>(Arrays.asList(procInfos.get(i).pkgList));
-                    Log.wtf("procInfos", runningPkgs.toString());
-                    Collection diff = subtractSets(runningPkgs, stalkList);
-
-                    if (diff != null) {
-                        stalkList.removeAll(diff);
-                    }
-                }
+//                for (int i = 0; i < services.size(); i++) {
+////                    Log.wtf("servisy", services.toString());
+//                    if (!stalkList.contains(services.get(i).baseActivity.getPackageName())) {
+//                        // you may broad cast a new application launch here.
+//                        stalkList.add(services.get(i).baseActivity.getPackageName());
+//                    }
+//                }
+//
+//                List<ActivityManager.RunningAppProcessInfo> procInfos = activityManager.getRunningAppProcesses();
+//
+//                for (int i = 0; i < procInfos.size(); i++) {
+//
+//                    ArrayList<String> runningPkgs = new ArrayList<String>(Arrays.asList(procInfos.get(i).pkgList));
+////                    Log.wtf("procInfos", runningPkgs.toString());
+//                    Collection diff = subtractSets(runningPkgs, stalkList);
+//
+//                    if (diff != null) {
+//                        stalkList.removeAll(diff);
+//                    }
+//                }
 
 
             }

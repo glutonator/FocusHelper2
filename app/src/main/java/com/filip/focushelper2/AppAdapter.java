@@ -27,7 +27,7 @@ public class AppAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return position;
+        return listStorage.get(position);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class AppAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         ViewHolder listViewHolder;
         if(convertView == null){
@@ -45,13 +45,27 @@ public class AppAdapter extends BaseAdapter {
 
             listViewHolder.textInListView = (TextView)convertView.findViewById(R.id.list_app_name);
             listViewHolder.imageInListView = (ImageView)convertView.findViewById(R.id.app_icon);
+            //
+            listViewHolder.checkBoxInListView =(CheckBox)convertView.findViewById(R.id.checkBox);
+            //
             convertView.setTag(listViewHolder);
         }else{
             listViewHolder = (ViewHolder)convertView.getTag();
         }
         listViewHolder.textInListView.setText(listStorage.get(position).getName());
         listViewHolder.imageInListView.setImageDrawable(listStorage.get(position).getIcon());
-//        listViewHolder.checkBoxInListView.setChecked(true);
+        //
+
+        listViewHolder.checkBoxInListView.setChecked(listStorage.get(position).isChecked());
+
+        listViewHolder.checkBoxInListView.setOnClickListener((v) ->{
+            listStorage.get(position).toogleChecked();
+            //todo: tutaj trzeba cos pokombinowac
+            //chyba już działa
+            //teraz trzeba jeszcze ogarnąć zapisywanie tej listy do pliku...tu i w tym drugim pliku
+        });
+
+
         return convertView;
     }
 
@@ -59,6 +73,6 @@ public class AppAdapter extends BaseAdapter {
 
         TextView textInListView;
         ImageView imageInListView;
-//        CheckBox checkBoxInListView;
+        CheckBox checkBoxInListView;
     }
 }
