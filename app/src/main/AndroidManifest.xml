@@ -27,14 +27,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AppsListActivity" />
+        <activity android:name=".AppListPackage.AppsListActivity" />
 
         <service
             android:name=".MonitoringService"
             android:enabled="true" />
 
         <activity android:name=".BlockDisplayActivity" />
-        <activity android:name=".ProfilesListActivity"></activity>
+        <activity android:name=".ProfilePackage.ProfilesListActivity"></activity>
     </application>
 
 </manifest>

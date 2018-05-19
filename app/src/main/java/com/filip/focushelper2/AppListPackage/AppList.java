@@ -1,4 +1,4 @@
-package com.filip.focushelper2;
+package com.filip.focushelper2.AppListPackage;
 
 import android.graphics.drawable.Drawable;
 

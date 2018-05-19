@@ -1,4 +1,4 @@
-package com.filip.focushelper2;
+package com.filip.focushelper2.AppListPackage;
 
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
@@ -11,13 +11,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
+import com.filip.focushelper2.R;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;

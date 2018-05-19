@@ -1,13 +1,14 @@
-package com.filip.focushelper2;
+package com.filip.focushelper2.ProfilePackage;
 
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
-import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.ListView;
+
+import com.filip.focushelper2.R;
 
 import java.util.LinkedList;
 import java.util.List;

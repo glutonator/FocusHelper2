@@ -1,4 +1,4 @@
-package com.filip.focushelper2;
+package com.filip.focushelper2.ProfilePackage;
 
 import java.util.Objects;
 

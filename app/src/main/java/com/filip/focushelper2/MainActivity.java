@@ -2,24 +2,22 @@ package com.filip.focushelper2;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.usage.UsageStats;
-import android.app.usage.UsageStatsManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.filip.focushelper2.AppListPackage.AppsListActivity;
+import com.filip.focushelper2.ProfilePackage.ProfilesListActivity;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity {
 

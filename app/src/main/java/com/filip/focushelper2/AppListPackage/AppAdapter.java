@@ -1,4 +1,4 @@
-package com.filip.focushelper2;
+package com.filip.focushelper2.AppListPackage;
 
 import android.content.Context;
 import android.util.Log;
@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.filip.focushelper2.R;
 
 import java.util.List;
 
