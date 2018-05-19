@@ -1,6 +1,7 @@
 package com.filip.focushelper2;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,8 +59,11 @@ public class AppAdapter extends BaseAdapter {
 
         listViewHolder.checkBoxInListView.setChecked(listStorage.get(position).isChecked());
 
+        //checkbox listener
         listViewHolder.checkBoxInListView.setOnClickListener((v) ->{
             listStorage.get(position).toogleChecked();
+            Log.wtf("AppAdapter",listStorage.get(position).getName());
+            Log.wtf("AppAdapter",""+position);
             //todo: tutaj trzeba cos pokombinowac
             //chyba już działa
             //teraz trzeba jeszcze ogarnąć zapisywanie tej listy do pliku...tu i w tym drugim pliku

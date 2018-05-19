@@ -1,5 +1,6 @@
 package com.filip.focushelper2;
 
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.graphics.drawable.Drawable;
@@ -34,7 +35,10 @@ public class AppsListActivity extends AppCompatActivity {
     //
     ListView userInstalledApps;
     AppAdapter installedAppAdapter;
+//    List<AppList> installedApps;
     //
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,12 +47,22 @@ public class AppsListActivity extends AppCompatActivity {
         userInstalledApps = (ListView)findViewById(R.id.installed_app_list);
         //
         userInstalledApps.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
+        //
+        //
+        SharedPreferences sharedPreferences = getSharedPreferences("test", MODE_PRIVATE);
 
         //
+
         final List<AppList> installedApps = getInstalledApps();
+//        installedApps = getInstalledApps();
+
         Collections.sort(installedApps);
         //
+        for(AppList appList:installedApps) {
+            if(sharedPreferences.getBoolean(appList.getName(),false)==true) {
+                appList.setChecked(true);
+            }
+        }
 
         //selectedIteams=installedApps;
         //
@@ -60,14 +74,11 @@ public class AppsListActivity extends AppCompatActivity {
         //
         userInstalledApps.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
+
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //
 
-                //
-                //Toast.makeText(AppsListActivity.this, position, Toast.LENGTH_SHORT);
                 AppList appList=(AppList)installedAppAdapter.getItem(position);
-//                AppList appList = (AppList) ap
                 appList.toogleChecked();
                 AppAdapter.ViewHolder viewHolder= (AppAdapter.ViewHolder)view.getTag();
                 viewHolder.checkBoxInListView.setChecked(appList.isChecked());
@@ -86,26 +97,15 @@ public class AppsListActivity extends AppCompatActivity {
                 //AppList selectedIteam2 = (AppList) findViewById(R.id.textView);
 //                Log.wtf("AppsListActivity",selectedIteam.toString());
                 Log.wtf("AppsListActivity",""+position+" "+id);
-                System.out.print(position+" "+id);
 
-                TextView tv = (TextView)findViewById(R.id.textView4);
-                tv.setText("ok");
 
                 AppList selectedIteam = appList;
                 if(selectedIteams.contains(selectedIteam)){
                     selectedIteams.remove(selectedIteam);
-//                    userInstalledApps.setItemChecked(position,false);
-//                    Log.wtf(""+position,""+userInstalledApps.isItemChecked(position));
-//                    userInstalledApps.refreshDrawableState();
-                    //todo: uncheck iteam - może się nie restertuje widok...nie wiem...
                 }
                 else {
                     selectedIteams.add(selectedIteam);
-//                    userInstalledApps.setItemChecked(position,true);
-//                    Log.wtf(""+position,""+userInstalledApps.isItemChecked(position));
-                    view.invalidate();
-//                    userInstalledApps.refreshDrawableState();
-                    //todo: check iteam - może się nie restertuje widok...nie wiem...
+
                 }
             }
         });
@@ -119,10 +119,33 @@ public class AppsListActivity extends AppCompatActivity {
                 iteams += "-" + appList.toString() + "\n";
             }
         }
-//        for(AppList iteam:selectedIteams) {
-//            iteams+="-"+iteam.toString()+"\n";
-//        }
         Toast.makeText(this,iteams,Toast.LENGTH_LONG).show();
+    }
+
+    public void onOkButtonClick(View view) {
+        showSelectedIteams();
+        deleteSharedPreferences("test");
+        SharedPreferences sharedPreferences = getSharedPreferences("test", MODE_PRIVATE);
+        SharedPreferences.Editor editor= sharedPreferences.edit();
+        //save checked apps
+        for(int i=0;i<userInstalledApps.getAdapter().getCount();i++) {
+            AppList appList  =((AppList)userInstalledApps.getAdapter().getItem(i));
+            if(appList.isChecked()==true) {
+                editor.putBoolean(appList.getName(),true);
+            }
+            else {
+               // boolean isChecked = sharedPreferences.getBoolean(appList.getName(),false);
+            }
+        }
+        editor.apply();
+
+
+
+        Log.wtf("onOkButtonClick", "OK");
+    }
+
+    public void onCancelButtonClick(View view) {
+        Log.wtf("onCancelButtonClick", "Cancel");
     }
 
     @Override
@@ -136,8 +159,6 @@ public class AppsListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-//        item.setCheckable(true);
-//        System.out.print("sdasa");
         showSelectedIteams();
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {

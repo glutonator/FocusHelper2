@@ -33,7 +33,8 @@
             android:name=".MonitoringService"
             android:enabled="true" />
 
-        <activity android:name=".BlockDisplayActivity"></activity>
+        <activity android:name=".BlockDisplayActivity" />
+        <activity android:name=".ProfilesListActivity"></activity>
     </application>
 
 </manifest>

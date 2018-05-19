@@ -146,5 +146,9 @@ public class MainActivity extends AppCompatActivity {
 //            //return currentApp;
         }
 
+        public void OnButtonProfiles(View view) {
+            startActivity(new Intent(MainActivity.this,ProfilesListActivity.class));
+        }
+
 
 }
