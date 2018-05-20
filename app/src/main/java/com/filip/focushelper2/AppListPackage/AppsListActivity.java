@@ -1,5 +1,6 @@
 package com.filip.focushelper2.AppListPackage;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -35,7 +36,7 @@ public class AppsListActivity extends AppCompatActivity {
     AppAdapter installedAppAdapter;
 //    List<AppList> installedApps;
     //
-
+    String profileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,14 @@ public class AppsListActivity extends AppCompatActivity {
         userInstalledApps.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         //
         //
-        SharedPreferences sharedPreferences = getSharedPreferences("test", MODE_PRIVATE);
+        Intent previousIntent = getIntent();
+        profileName = previousIntent.getStringExtra("profileName");
+        if(profileName==null) {
+            Log.wtf("DSadadsa","nulllllllllllll");
+            profileName="temp";
+            deleteSharedPreferences(profileName);
+        }
+        SharedPreferences sharedPreferences = getSharedPreferences(profileName, MODE_PRIVATE);
 
         //
 
@@ -122,8 +130,8 @@ public class AppsListActivity extends AppCompatActivity {
 
     public void onOkButtonClick(View view) {
         showSelectedIteams();
-        deleteSharedPreferences("test");
-        SharedPreferences sharedPreferences = getSharedPreferences("test", MODE_PRIVATE);
+        deleteSharedPreferences(profileName);
+        SharedPreferences sharedPreferences = getSharedPreferences(profileName, MODE_PRIVATE);
         SharedPreferences.Editor editor= sharedPreferences.edit();
         //save checked apps
         for(int i=0;i<userInstalledApps.getAdapter().getCount();i++) {
@@ -140,6 +148,7 @@ public class AppsListActivity extends AppCompatActivity {
 
 
         Log.wtf("onOkButtonClick", "OK");
+        finish();
     }
 
     public void onCancelButtonClick(View view) {

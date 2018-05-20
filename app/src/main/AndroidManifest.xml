@@ -34,7 +34,8 @@
             android:enabled="true" />
 
         <activity android:name=".BlockDisplayActivity" />
-        <activity android:name=".ProfilePackage.ProfilesListActivity"></activity>
+        <activity android:name=".ProfilePackage.ProfilesListActivity" />
+        <activity android:name=".ProfilePackage.ProfileSettingsActivity"></activity>
     </application>
 
 </manifest>
