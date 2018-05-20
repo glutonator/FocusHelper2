@@ -18,6 +18,7 @@ import java.util.Map;
 public class ProfileSettingsActivity extends AppCompatActivity {
 
     private String profileName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,27 +32,26 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
     public void OnButtonListOfBlockedApps(View view) {
         Intent myIntent = new Intent(ProfileSettingsActivity.this, AppsListActivity.class);
-        myIntent.putExtra("profileName",profileName);
+        myIntent.putExtra("profileName", profileName);
         startActivity(myIntent);
     }
 
     public void OnButtonOkey(View view) {
-        EditText txtDescription = (EditText)findViewById(R.id.editTextProfileName);
+        EditText txtDescription = (EditText) findViewById(R.id.editTextProfileName);
         String profileName = txtDescription.getText().toString();
         Toast.makeText(this, profileName, Toast.LENGTH_LONG).show();
 
-//        deleteSharedPreferences(profileName);
         SharedPreferences sharedPreferencesTEMP = getSharedPreferences("temp", MODE_PRIVATE);
         SharedPreferences sharedPreferences = getSharedPreferences(profileName, MODE_PRIVATE);
 
-        SharedPreferences.Editor editor= sharedPreferences.edit();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
 
         Map<String, Boolean> sharedPreferencesTEMPAll = (Map<String, Boolean>) sharedPreferencesTEMP.getAll();
 
-        for(Map.Entry<String,Boolean> entry : sharedPreferencesTEMPAll.entrySet()) {
-            editor.putBoolean(entry.getKey(),entry.getValue());
-            Log.wtf("sheredfiles_apps",entry.getKey() + " " + entry.getValue());
+        for (Map.Entry<String, Boolean> entry : sharedPreferencesTEMPAll.entrySet()) {
+            editor.putBoolean(entry.getKey(), entry.getValue());
+            Log.wtf("sheredfiles_apps", entry.getKey() + " " + entry.getValue());
 
         }
         editor.apply();
@@ -59,7 +59,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         finish();
     }
 
-    public void OnButtonDelete (View view) {
+    public void OnButtonDelete(View view) {
         deleteSharedPreferences(profileName);
         finish();
     }

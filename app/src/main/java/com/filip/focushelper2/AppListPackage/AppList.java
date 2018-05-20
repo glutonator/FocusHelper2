@@ -8,9 +8,7 @@ public class AppList implements Comparable {
     private String name;
     Drawable icon;
     private String packageName;
-    //
     private boolean checked = false;
-    ///
 
     public AppList(String name, Drawable icon) {
         this.name = name;

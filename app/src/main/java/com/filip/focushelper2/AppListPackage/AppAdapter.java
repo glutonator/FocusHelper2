@@ -19,7 +19,7 @@ public class AppAdapter extends BaseAdapter {
     private List<AppList> listStorage;
 
     public AppAdapter(Context context, List<AppList> customizedListView) {
-        layoutInflater =(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         listStorage = customizedListView;
     }
 
@@ -42,40 +42,30 @@ public class AppAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
 
         ViewHolder listViewHolder;
-        if(convertView == null){
+        if (convertView == null) {
             listViewHolder = new ViewHolder();
             convertView = layoutInflater.inflate(R.layout.installed_app_list, parent, false);
-
-            listViewHolder.textInListView = (TextView)convertView.findViewById(R.id.list_app_name);
-            listViewHolder.imageInListView = (ImageView)convertView.findViewById(R.id.app_icon);
-            //
-            listViewHolder.checkBoxInListView =(CheckBox)convertView.findViewById(R.id.checkBox);
-            //
+            listViewHolder.textInListView = (TextView) convertView.findViewById(R.id.list_app_name);
+            listViewHolder.imageInListView = (ImageView) convertView.findViewById(R.id.app_icon);
+            listViewHolder.checkBoxInListView = (CheckBox) convertView.findViewById(R.id.checkBox);
             convertView.setTag(listViewHolder);
-        }else{
-            listViewHolder = (ViewHolder)convertView.getTag();
+        } else {
+            listViewHolder = (ViewHolder) convertView.getTag();
         }
         listViewHolder.textInListView.setText(listStorage.get(position).getName());
         listViewHolder.imageInListView.setImageDrawable(listStorage.get(position).getIcon());
-        //
-
         listViewHolder.checkBoxInListView.setChecked(listStorage.get(position).isChecked());
 
         //checkbox listener
-        listViewHolder.checkBoxInListView.setOnClickListener((v) ->{
+        listViewHolder.checkBoxInListView.setOnClickListener((v) -> {
             listStorage.get(position).toogleChecked();
-            Log.wtf("AppAdapter",listStorage.get(position).getName());
-            Log.wtf("AppAdapter",""+position);
-            //todo: tutaj trzeba cos pokombinowac
-            //chyba już działa
-            //teraz trzeba jeszcze ogarnąć zapisywanie tej listy do pliku...tu i w tym drugim pliku
+            Log.wtf("AppAdapter", listStorage.get(position).getName());
+            Log.wtf("AppAdapter", "" + position);
         });
-
-
         return convertView;
     }
 
-    static class ViewHolder{
+    static class ViewHolder {
 
         TextView textInListView;
         ImageView imageInListView;

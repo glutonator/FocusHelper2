@@ -34,7 +34,7 @@ public class AppsListActivity extends AppCompatActivity {
     //
     ListView userInstalledApps;
     AppAdapter installedAppAdapter;
-//    List<AppList> installedApps;
+    //    List<AppList> installedApps;
     //
     String profileName;
 
@@ -43,73 +43,46 @@ public class AppsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apps_list);
 
-        userInstalledApps = (ListView)findViewById(R.id.installed_app_list);
-        //
+        userInstalledApps = (ListView) findViewById(R.id.installed_app_list);
         userInstalledApps.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        //
-        //
+
         Intent previousIntent = getIntent();
         profileName = previousIntent.getStringExtra("profileName");
-        if(profileName==null) {
-            Log.wtf("DSadadsa","nulllllllllllll");
-            profileName="temp";
+        if (profileName == null) {
+            Log.wtf("DSadadsa", "nulllllllllllll");
+            profileName = "temp";
             deleteSharedPreferences(profileName);
         }
         SharedPreferences sharedPreferences = getSharedPreferences(profileName, MODE_PRIVATE);
-
-        //
-
         final List<AppList> installedApps = getInstalledApps();
-//        installedApps = getInstalledApps();
-
         Collections.sort(installedApps);
-        //
-        for(AppList appList:installedApps) {
-            if(sharedPreferences.getBoolean(appList.getName(),false)==true) {
+        for (AppList appList : installedApps) {
+            if (sharedPreferences.getBoolean(appList.getName(), false) == true) {
                 appList.setChecked(true);
             }
         }
 
-        //selectedIteams=installedApps;
-        //
         installedAppAdapter = new AppAdapter(AppsListActivity.this, installedApps);
 
         userInstalledApps.setAdapter(installedAppAdapter);
-        //
-
-        //
         userInstalledApps.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                AppList appList=(AppList)installedAppAdapter.getItem(position);
+                AppList appList = (AppList) installedAppAdapter.getItem(position);
                 appList.toogleChecked();
-                AppAdapter.ViewHolder viewHolder= (AppAdapter.ViewHolder)view.getTag();
+                AppAdapter.ViewHolder viewHolder = (AppAdapter.ViewHolder) view.getTag();
                 viewHolder.checkBoxInListView.setChecked(appList.isChecked());
-                Log.wtf("AppsListActivity",appList.getName());
-
-
-                //AppList selectedIteam=  installedApps.get(position); //.getItemAtPosition(position);
-
-//                viewHolder.checkBoxInListView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//                    @Override
-//                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                        Log.wtf("AppsListActivity","sadsaddsadsa");
-//                    }
-//                });
-
-                //AppList selectedIteam2 = (AppList) findViewById(R.id.textView);
-//                Log.wtf("AppsListActivity",selectedIteam.toString());
-                Log.wtf("AppsListActivity",""+position+" "+id);
+                Log.wtf("AppsListActivity", appList.getName());
+                Log.wtf("AppsListActivity", "" + position + " " + id);
 
 
                 AppList selectedIteam = appList;
-                if(selectedIteams.contains(selectedIteam)){
+                if (selectedIteams.contains(selectedIteam)) {
                     selectedIteams.remove(selectedIteam);
-                }
-                else {
+                } else {
                     selectedIteams.add(selectedIteam);
 
                 }
@@ -118,34 +91,31 @@ public class AppsListActivity extends AppCompatActivity {
     }
 
     public void showSelectedIteams() {
-        String iteams="";
-        for(int i=0;i<userInstalledApps.getAdapter().getCount();i++) {
-            AppList appList  =((AppList)userInstalledApps.getAdapter().getItem(i));
-            if(appList.isChecked()==true) {
+        String iteams = "";
+        for (int i = 0; i < userInstalledApps.getAdapter().getCount(); i++) {
+            AppList appList = ((AppList) userInstalledApps.getAdapter().getItem(i));
+            if (appList.isChecked() == true) {
                 iteams += "-" + appList.toString() + "\n";
             }
         }
-        Toast.makeText(this,iteams,Toast.LENGTH_LONG).show();
+        Toast.makeText(this, iteams, Toast.LENGTH_LONG).show();
     }
 
     public void onOkButtonClick(View view) {
         showSelectedIteams();
         deleteSharedPreferences(profileName);
         SharedPreferences sharedPreferences = getSharedPreferences(profileName, MODE_PRIVATE);
-        SharedPreferences.Editor editor= sharedPreferences.edit();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         //save checked apps
-        for(int i=0;i<userInstalledApps.getAdapter().getCount();i++) {
-            AppList appList  =((AppList)userInstalledApps.getAdapter().getItem(i));
-            if(appList.isChecked()==true) {
-                editor.putBoolean(appList.getName(),true);
-            }
-            else {
-               // boolean isChecked = sharedPreferences.getBoolean(appList.getName(),false);
+        for (int i = 0; i < userInstalledApps.getAdapter().getCount(); i++) {
+            AppList appList = ((AppList) userInstalledApps.getAdapter().getItem(i));
+            if (appList.isChecked() == true) {
+                editor.putBoolean(appList.getName(), true);
+            } else {
+                // boolean isChecked = sharedPreferences.getBoolean(appList.getName(),false);
             }
         }
         editor.apply();
-
-
 
         Log.wtf("onOkButtonClick", "OK");
         finish();
@@ -160,7 +130,6 @@ public class AppsListActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
 
 
     @Override
@@ -184,7 +153,7 @@ public class AppsListActivity extends AppCompatActivity {
                 String appName = p.applicationInfo.loadLabel(getPackageManager()).toString();
                 String packageName = p.applicationInfo.packageName;
                 Drawable icon = p.applicationInfo.loadIcon(getPackageManager());
-                res.add(new AppList(appName, icon,packageName));
+                res.add(new AppList(appName, icon, packageName));
             }
         }
         return res;

@@ -30,19 +30,6 @@ public class MainActivity extends AppCompatActivity {
     public void toastMe(View view) {
         Toast myToast = Toast.makeText(this, "Hello!", Toast.LENGTH_SHORT);
             myToast.show();
-        // val myToast = Toast.makeText(this, message, duration);
-//        Helper.statApp(MainActivity.this,"com.facebook.orca");
-//        if (Helper.isAppRunning(MainActivity.this, "com.facebook.orca")) {
-//            // App is running
-//            Toast myToast = Toast.makeText(this, "App runing!", Toast.LENGTH_SHORT);
-//            myToast.show();
-//        } else {
-//            // App is not running
-//            Toast myToast = Toast.makeText(this, "App not running!", Toast.LENGTH_SHORT);
-//            myToast.show();
-//        }
-
-
     }
 
     public void countMe (View view) {
