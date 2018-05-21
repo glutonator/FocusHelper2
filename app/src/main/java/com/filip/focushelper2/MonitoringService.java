@@ -2,7 +2,6 @@ package com.filip.focushelper2;
 
 import android.app.ActivityManager;
 import android.app.IntentService;
-import android.app.Service;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
@@ -11,29 +10,29 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.graphics.drawable.Drawable;
-import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.filip.focushelper2.AppListPackage.AppList;
-import com.filip.focushelper2.ProfilePackage.ProfileList;
 
 import java.io.File;
+import java.text.DateFormatSymbols;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
-import java.util.logging.Logger;
 
 //IntentService
 public class MonitoringService extends IntentService {
@@ -60,8 +59,13 @@ public class MonitoringService extends IntentService {
     Map<String, ?> allEntries;
     //
 
+    List<String> blockedAppsList;
+    List<String> blockedAppsPackeageList;
+    List<AppList> installedApps;
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Toast.makeText(this, "onStartCommand!", Toast.LENGTH_SHORT).show();
         final List<String> stalkList = new ArrayList<>();
 //        stalkList.add("com.filip.focushelper2");
 
@@ -69,14 +73,32 @@ public class MonitoringService extends IntentService {
 //        stalkList.add("com.facebook.katana");
 //        stalkList.add("com.instagram.android");
 
-        List<String> blockedAppsList=getAllBlockedApps();
-        List<String> blockedAppsPackeageList=new ArrayList<>();
-        List<AppList> installedApps =getInstalledApps();
+        blockedAppsList=getAllBlockedApps();
+        blockedAppsPackeageList=new ArrayList<>();
+        installedApps =getInstalledApps();
         for(String appName:blockedAppsList) {
             String temp = getPackageName(appName,installedApps);
             blockedAppsPackeageList.add(temp);
         }
         stalkList.addAll(blockedAppsPackeageList);
+
+        //adding new clocked apps
+        Timer timer2 = new Timer();
+        timer2.scheduleAtFixedRate(new TimerTask() {
+            public void run(){
+                blockedAppsList = getAllBlockedApps();
+                blockedAppsPackeageList = new ArrayList<>();
+                installedApps = getInstalledApps();
+                for (String appName : blockedAppsList) {
+                    String temp = getPackageName(appName, installedApps);
+                    blockedAppsPackeageList.add(temp);
+                }
+                stalkList.clear();
+                stalkList.addAll(blockedAppsPackeageList);
+
+            }
+        }, 2000, 2000);
+
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
 
@@ -85,9 +107,9 @@ public class MonitoringService extends IntentService {
 //                final List<ActivityManager.RunningTaskInfo> services = activityManager.getRunningTasks(Integer.MAX_VALUE);
                 //
                 String AcctiveAppStr = getCurrentRunningApp();
-                sharedPrefsapp = getApplicationContext().getSharedPreferences("appdb", Context.MODE_PRIVATE);
-                allEntries = null;
-                allEntries = sharedPrefsapp.getAll();
+//                sharedPrefsapp = getApplicationContext().getSharedPreferences("appdb", Context.MODE_PRIVATE);
+//                allEntries = null;
+//                allEntries = sharedPrefsapp.getAll();
 
                 for (String blockedAppStr : stalkList) {
                     if (blockedAppStr.equals(AcctiveAppStr)) {
@@ -102,7 +124,7 @@ public class MonitoringService extends IntentService {
 
 
             }
-        }, 20000, 16000);  // every 6 seconds
+        }, 1000, 1000);  // every 6 seconds
         // 200 i 200 - działa dobrze...ale nie wiem czy procesor i bateria wytrzymaja...
 
         return START_STICKY;
@@ -146,18 +168,22 @@ public class MonitoringService extends IntentService {
             String[] list = prefsdir.list();
             for (String profileName : list) {
                 profileName = profileName.substring(0, (profileName.lastIndexOf(".")));
-
-                SharedPreferences sharedPreferences = getSharedPreferences(profileName, MODE_PRIVATE);
-                Map<String, ?> sharedPreferencesAll = sharedPreferences.getAll();
-//                String Appsnames = "";
-                for (Map.Entry<String, ?> entry : sharedPreferencesAll.entrySet()) {
-
-//                    Appsnames += entry.getKey() + ", ";
-                    Log.wtf("blocked_apps", entry.getKey() + " " + entry.getValue());
-                    res.add(entry.getKey());
-
-
+                //jesli profileName jest params to:
+                if(profileName.contains("_Params")) {
+                    if(isProfileCurrentlyActive(profileName)==true) {
+                        //blocking apps
+                        String profileNameApps = profileName.substring(0, (profileName.lastIndexOf("_")));
+                        SharedPreferences sharedPreferences = getSharedPreferences(profileNameApps, MODE_PRIVATE);
+                        Map<String, ?> sharedPreferencesAll = sharedPreferences.getAll();
+                        for (Map.Entry<String, ?> entry : sharedPreferencesAll.entrySet()) {
+                            Log.wtf("blocked_apps", entry.getKey() + " " + entry.getValue());
+                            res.add(entry.getKey());
+                        }
+                    }
+                    //continue;
                 }
+                //
+
 //                res.add(new ProfileList(profileName, Appsnames));
 
             }
@@ -168,6 +194,73 @@ public class MonitoringService extends IntentService {
 
         }
         return new ArrayList<>(res);
+    }
+
+    private boolean isProfileCurrentlyActive(String profileName) {
+        SharedPreferences sharedPreferences = getSharedPreferences(profileName, MODE_PRIVATE);
+//        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+//        Date d = new Date();
+//        String dayOfTheWeek = sdf.format(d);
+        if(isCurrentDayOftheWeek(sharedPreferences)==false) {
+            return false;
+        }
+        int hoursStart = sharedPreferences.getInt("hoursStart",-1);
+        int minutesStart = sharedPreferences.getInt("minutesStart",-1);
+        int hoursStop = sharedPreferences.getInt("hoursStop",-1);
+        int minutesStop = sharedPreferences.getInt("minutesStop",-1);
+        //no settings
+        if(hoursStart==-1 || minutesStart==-1 || hoursStop==-1 || minutesStop==-1) {
+            return false;
+        }
+        Calendar mcurrentTime = Calendar.getInstance();
+        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = mcurrentTime.get(Calendar.MINUTE);
+        //not in time window
+        if(!((hoursStart<hour||(hoursStart==hour&&minutesStart<=minute))
+                &&(hoursStop>hour||(hoursStop==hour&&minutesStop>=minute)))) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean isCurrentDayOftheWeek (SharedPreferences sharedPreferences) {
+        Calendar mcurrentTime = Calendar.getInstance();
+        int dayOfWeek = mcurrentTime.get(Calendar.DAY_OF_WEEK);
+        String weekday = new DateFormatSymbols(Locale.ENGLISH).getWeekdays()[dayOfWeek];
+
+//        String day1 = sharedPreferences.getString("Monday","");
+
+        String dayyy;
+        dayyy = sharedPreferences.getString("Monday", "");
+        if (dayyy.equals(weekday)) {
+            return true;
+        }
+        dayyy = sharedPreferences.getString("Tuesday", "");
+        if (dayyy.equals(weekday)) {
+            return true;
+        }
+        dayyy = sharedPreferences.getString("Wednesday", "");
+        if (dayyy.equals(weekday)) {
+            return true;
+        }
+        dayyy = sharedPreferences.getString("Thursday", "");
+        if (dayyy.equals(weekday)) {
+            return true;
+        }
+        dayyy = sharedPreferences.getString("Friday", "");
+        if (dayyy.equals(weekday)) {
+            return true;
+        }
+        dayyy = sharedPreferences.getString("Saturday", "");
+        if (dayyy.equals(weekday)) {
+            return true;
+        }
+        dayyy = sharedPreferences.getString("Sunday", "");
+        if (dayyy.equals(weekday)) {
+            return true;
+        }
+        return false;
     }
 
     private String getPackageName(String packageName) {

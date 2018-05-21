@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.filip.focushelper2.AppListPackage.AppsListActivity;
 import com.filip.focushelper2.ProfilePackage.ProfilesListActivity;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -25,21 +27,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MapView mapView=(MapView)findViewById(R.id.mapView);
     }
 
     public void toastMe(View view) {
         Toast myToast = Toast.makeText(this, "Hello!", Toast.LENGTH_SHORT);
-            myToast.show();
+        myToast.show();
     }
 
-    public void lunchService (View view) {
+    public void lunchService(View view) {
         Intent intent = new Intent(this, MonitoringService.class);
         startService(intent);
-        }
+    }
 
-        public void OnButtonProfiles(View view) {
-            startActivity(new Intent(MainActivity.this,ProfilesListActivity.class));
-        }
+    public void OnButtonProfiles(View view) {
+        startActivity(new Intent(MainActivity.this, ProfilesListActivity.class));
+    }
+
+    public void onButtonMap(View view) {
+        startActivity(new Intent(MainActivity.this, MapsActivity.class));
+    }
 
 
 }

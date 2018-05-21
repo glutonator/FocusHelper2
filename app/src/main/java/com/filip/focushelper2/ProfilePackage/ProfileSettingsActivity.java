@@ -220,6 +220,8 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
     public void OnButtonDelete(View view) {
         deleteSharedPreferences(profileName);
+        deleteSharedPreferences(profileName+"_Params");
+
         finish();
     }
 
