@@ -213,6 +213,10 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         editorParam.putInt("hoursStop",hoursStop);
         editorParam.putInt("minutesStop",minutesStop);
 
+        //setting type 0 - timer
+        editorParam.putBoolean("type",false);
+
+
         editorParam.apply();
 
         finish();

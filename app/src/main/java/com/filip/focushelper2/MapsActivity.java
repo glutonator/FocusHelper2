@@ -1,10 +1,13 @@
 package com.filip.focushelper2;
 
+import android.content.Intent;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -27,6 +30,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location mLastKnownLocation;
     private static final int DEFAULT_ZOOM = 15;
     private final LatLng mDefaultLocation = new LatLng(-33.8523341, 151.2106085);
+    private String profileName;
 
 
     @Override
@@ -39,6 +43,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        //get profile name
+        Intent previousIntent = getIntent();
+        profileName = previousIntent.getStringExtra("profileName");
+        if (profileName == null) {
+            Log.wtf("DSadadsa", "nulllllllllllll");
+            profileName = "temp";
+            deleteSharedPreferences(profileName);
+        }
+        //tutaj albo mam tempa jak jest bez nazwy, albo jest wcześniejsza nazwa
     }
 
 
@@ -58,10 +72,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         getDeviceLocation();
         // Add a marker in Sydney and move the camera
 //        LatLng sydney = new LatLng(-34, 151);
-        if (mLastKnownLocation==null) {
-            positionMy = new LatLng(52.218942,21.011645);
-        }
-        else {
+        if (mLastKnownLocation == null) {
+            positionMy = new LatLng(52.218942, 21.011645);
+        } else {
             positionMy = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
         }
 
@@ -76,7 +89,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         UiSettings uiSettings = mMap.getUiSettings();
         uiSettings.setCompassEnabled(true);
         uiSettings.setMapToolbarEnabled(true);
-        uiSettings.setZoomControlsEnabled(true);
+//        uiSettings.setZoomControlsEnabled(true);
     }
 
 
@@ -112,5 +125,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
+    }
+
+    public void OnButtonClickSetLocation (View view) {
+        double latitude =  mLastKnownLocation.getLatitude();
+        double longitude =  mLastKnownLocation.getLongitude();
+        Toast.makeText(this, "Hello!"+" "+latitude+" "+longitude, Toast.LENGTH_SHORT).show();
+
+        String profileNameParams = profileName + "_Params";
+        android.content.SharedPreferences sharedPreferences = getSharedPreferences(profileNameParams, MODE_PRIVATE);
+        android.content.SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putFloat("latitude",(float)latitude);
+        editor.putFloat("longitude",(float)longitude);
+        editor.apply();
+        finish();
+
     }
 }
