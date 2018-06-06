@@ -88,31 +88,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
 
 
-//        Map<String, ?> sharedPreferencesAll = sharedPreferences.getAll();
-//        for (Map.Entry<String, ?> entry : sharedPreferencesAll.entrySet()) {
-//            String temp =(entry.getValue();
-//            if(temp.equals("hoursStart")||temp.equals("minutesStart")||temp.equals("hoursStop")||temp.equals("minutesStop")) {
-//
-//            }
-//            else {
-//
-//            }
-//        }
-
-
-//        editorParam.putInt("hoursStart",hoursStart);
-//        editorParam.putInt("minutesStart",minutesStart);
-//
-//        editorParam.putInt("hoursStop",hoursStop);
-//        editorParam.putInt("minutesStop",minutesStop);
-
-        //setting time and dialogs
-//        Calendar mcurrentTime = Calendar.getInstance();
-//        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-//        int minute = mcurrentTime.get(Calendar.MINUTE);
-
         TextView timeViewStart =(TextView) findViewById(R.id.timeTextViewStart);
-//        timeViewStart.setText( hour + ":" + minute);
         timeViewStart.setText( hoursStart + ":" + minutesStart);
 
         timeViewStart.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +113,6 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         });
 
         TextView timeViewStop =(TextView) findViewById(R.id.timeTextViewStop);
-//        timeViewStop.setText( hour+1 + ":" + minute);
         timeViewStop.setText( hoursStop + ":" + minutesStop);
 
         timeViewStop.setOnClickListener(new View.OnClickListener() {
@@ -249,7 +224,6 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         if(isInSetDaysOfTheWeek(day)==true) {
             deleteSetDaysOfTheWeek(day);
             button.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-//            button.setBackgroundColor(R.color.colorPrimary);
         }
         else {
             setSetDaysOfTheWeek(day);

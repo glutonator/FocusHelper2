@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MapView mapView=(MapView)findViewById(R.id.mapView);
     }
 
     public void toastMe(View view) {

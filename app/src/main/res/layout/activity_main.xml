@@ -9,24 +9,11 @@
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/life_is_brutal"
+        android:layout_height="18dp"
+        android:text="Hello in FocusHelper"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/left_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="238dp"
-        android:layout_marginStart="58dp"
-        android:layout_marginTop="289dp"
-        android:onClick="toastMe"
-        android:text="Toast"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -34,56 +21,24 @@
         android:id="@+id/buttonServiceStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="46dp"
-        android:layout_marginStart="58dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginStart="40dp"
         android:onClick="lunchService"
         android:text="Service"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/left_button" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/buttonProfiles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="46dp"
-        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginEnd="40dp"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="24dp"
         android:onClick="OnButtonProfiles"
         android:text="Profiles"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/buttonServiceStart" />
-
-    <Button
-        android:id="@+id/buttonMap"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="73dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="296dp"
-        android:text="Map"
-        app:layout_constraintBottom_toTopOf="@+id/buttonProfiles"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/left_button"
-        app:layout_constraintTop_toTopOf="parent"
-        android:onClick="onButtonMap"/>
-
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="195dp"
-        android:layout_height="124dp"
-        android:layout_marginBottom="38dp"
-        android:layout_marginEnd="69dp"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="84dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

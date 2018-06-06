@@ -47,6 +47,7 @@ import java.util.TimerTask;
 import java.util.TreeMap;
 
 import static java.lang.StrictMath.abs;
+
 import android.os.Handler;
 
 //IntentService
@@ -54,7 +55,6 @@ public class MonitoringService extends IntentService implements SensorEventListe
     public MonitoringService() {
         super("MonitoringService");
 //        super();
-
     }
 
     //accelometr
@@ -63,21 +63,6 @@ public class MonitoringService extends IntentService implements SensorEventListe
     private float mAccel; // acceleration apart from gravity
     private float mAccelCurrent; // current acceleration including gravity
     private float mAccelLast; // last acceleration including gravity
-
-//    @Override
-//    public IBinder onBind(Intent intent) {
-//        return null;
-//    }
-
-//    @Override
-//    public int onStartCommand(Intent intent, int flags, int startId) {
-//        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-//        mAccelerometer = mSensorManager
-//                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-//        mSensorManager.registerListener(this, mAccelerometer,
-//                SensorManager.SENSOR_DELAY_UI, new Handler());
-//        return START_STICKY;
-//    }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -105,7 +90,7 @@ public class MonitoringService extends IntentService implements SensorEventListe
         final NotificationManager mgr = (NotificationManager) this
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder note = new NotificationCompat.Builder(this);
-        note.setContentTitle("Device Accelerometer Notification");
+        note.setContentTitle("Go back to work!!!!!");
         note.setTicker("New Message Alert!");
         note.setAutoCancel(true);
         // to set default sound/light/vibrate or all
@@ -130,67 +115,51 @@ public class MonitoringService extends IntentService implements SensorEventListe
 
     private Location myLocation;
 
-    private class LocationListener implements android.location.LocationListener
-    {
+    private class LocationListener implements android.location.LocationListener {
         Location mLastLocation;
 
-        public LocationListener(String provider)
-        {
+        public LocationListener(String provider) {
             Log.wtf(TAG, "LocationListener " + provider);
             mLastLocation = new Location(provider);
             myLocation = mLastLocation;
         }
 
         @Override
-        public void onLocationChanged(Location location)
-        {
-            //tutaj trzeba weryfikować czy zmina spowodowała dopisanie nowych rzeczy do listy
+        public void onLocationChanged(Location location) {
             Log.wtf(TAG, "onLocationChanged: " + location);
             mLastLocation.set(location);
             myLocation.set(location);
         }
 
         @Override
-        public void onProviderDisabled(String provider)
-        {
+        public void onProviderDisabled(String provider) {
             Log.wtf(TAG, "onProviderDisabled: " + provider);
         }
 
         @Override
-        public void onProviderEnabled(String provider)
-        {
+        public void onProviderEnabled(String provider) {
             Log.wtf(TAG, "onProviderEnabled: " + provider);
         }
 
         @Override
-        public void onStatusChanged(String provider, int status, Bundle extras)
-        {
+        public void onStatusChanged(String provider, int status, Bundle extras) {
             Log.wtf(TAG, "onStatusChanged: " + provider);
         }
     }
 
-    LocationListener[] mLocationListeners = new LocationListener[] {
+    LocationListener[] mLocationListeners = new LocationListener[]{
             new LocationListener(LocationManager.GPS_PROVIDER),
             new LocationListener(LocationManager.NETWORK_PROVIDER)
     };
 
     @Override
-    public IBinder onBind(Intent arg0)
-    {
+    public IBinder onBind(Intent arg0) {
         return null;
     }
 
-//    @Override
-//    public int onStartCommand(Intent intent, int flags, int startId)
-//    {
-//        Log.e(TAG, "onStartCommand");
-//        super.onStartCommand(intent, flags, startId);
-//        return START_STICKY;
-//    }
 
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         Log.e(TAG, "onCreate");
         initializeLocationManager();
         try {
@@ -214,8 +183,7 @@ public class MonitoringService extends IntentService implements SensorEventListe
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         Log.e(TAG, "onDestroy");
         super.onDestroy();
         if (mLocationManager != null) {
@@ -236,29 +204,13 @@ public class MonitoringService extends IntentService implements SensorEventListe
         }
     }
 
-
     //location service end
-
-
-
-
-
-//     @Nullable
-//     @Override
-//     public IBinder onBind(Intent intent) {
-//         System.out.println("SERVICE STARTED! ! !");
-//         return null;
-//     }
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         System.out.println("SERVICE STARTED! ! !");
     }
 
-    //
-    SharedPreferences sharedPrefsapp;
-    Map<String, ?> allEntries;
-    //
 
     List<String> blockedAppsList;
     List<String> blockedAppsPackeageList;
@@ -276,17 +228,12 @@ public class MonitoringService extends IntentService implements SensorEventListe
         //standard
         Toast.makeText(this, "onStartCommand!", Toast.LENGTH_SHORT).show();
         final List<String> stalkList = new ArrayList<>();
-//        stalkList.add("com.filip.focushelper2");
 
-//        stalkList.add("com.facebook.orca");
-//        stalkList.add("com.facebook.katana");
-//        stalkList.add("com.instagram.android");
-
-        blockedAppsList=getAllBlockedApps();
-        blockedAppsPackeageList=new ArrayList<>();
-        installedApps =getInstalledApps();
-        for(String appName:blockedAppsList) {
-            String temp = getPackageName(appName,installedApps);
+        blockedAppsList = getAllBlockedApps();
+        blockedAppsPackeageList = new ArrayList<>();
+        installedApps = getInstalledApps();
+        for (String appName : blockedAppsList) {
+            String temp = getPackageName(appName, installedApps);
             blockedAppsPackeageList.add(temp);
         }
         stalkList.addAll(blockedAppsPackeageList);
@@ -294,7 +241,7 @@ public class MonitoringService extends IntentService implements SensorEventListe
         //adding new clocked apps
         Timer timer2 = new Timer();
         timer2.scheduleAtFixedRate(new TimerTask() {
-            public void run(){
+            public void run() {
                 blockedAppsList = getAllBlockedApps();
                 blockedAppsPackeageList = new ArrayList<>();
                 installedApps = getInstalledApps();
@@ -313,12 +260,7 @@ public class MonitoringService extends IntentService implements SensorEventListe
 
             public void run() {
                 final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-//                final List<ActivityManager.RunningTaskInfo> services = activityManager.getRunningTasks(Integer.MAX_VALUE);
-                //
                 String AcctiveAppStr = getCurrentRunningApp();
-//                sharedPrefsapp = getApplicationContext().getSharedPreferences("appdb", Context.MODE_PRIVATE);
-//                allEntries = null;
-//                allEntries = sharedPrefsapp.getAll();
 
                 for (String blockedAppStr : stalkList) {
                     if (blockedAppStr.equals(AcctiveAppStr)) {
@@ -326,14 +268,12 @@ public class MonitoringService extends IntentService implements SensorEventListe
                         Intent intent = new Intent(getBaseContext(), BlockDisplayActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
-
                         activityManager.killBackgroundProcesses(AcctiveAppStr);
                     }
                 }
-
-
             }
-        }, 1000, 1000);  // every 6 seconds
+        }, 1000, 1000);
+
         // 200 i 200 - działa dobrze...ale nie wiem czy procesor i bateria wytrzymaja...
 
         return START_STICKY;
@@ -341,8 +281,7 @@ public class MonitoringService extends IntentService implements SensorEventListe
 
     public String getCurrentRunningApp() {
         String currentApp = "NULL";
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
-        {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             //noinspection ResourceType
             UsageStatsManager usm = (UsageStatsManager) getApplicationContext().getSystemService(Context.USAGE_STATS_SERVICE);
             long time = System.currentTimeMillis();
@@ -358,8 +297,7 @@ public class MonitoringService extends IntentService implements SensorEventListe
                     currentApp = (mySortedMap.get(mySortedMap.lastKey())).getPackageName();
                 }
             }
-        } else
-        {
+        } else {
             ActivityManager am = (ActivityManager) this.getSystemService(Context.ACTIVITY_SERVICE);
             List<ActivityManager.RunningAppProcessInfo> tasks = am.getRunningAppProcesses();
             currentApp = tasks.get(0).processName;
@@ -378,8 +316,8 @@ public class MonitoringService extends IntentService implements SensorEventListe
             for (String profileName : list) {
                 profileName = profileName.substring(0, (profileName.lastIndexOf(".")));
                 //jesli profileName jest params to:
-                if(profileName.contains("_Params")) {
-                    if(isProfileCurrentlyActive(profileName)==true) {
+                if (profileName.contains("_Params")) {
+                    if (isProfileCurrentlyActive(profileName) == true) {
                         //blocking apps
                         String profileNameApps = profileName.substring(0, (profileName.lastIndexOf("_")));
                         SharedPreferences sharedPreferences = getSharedPreferences(profileNameApps, MODE_PRIVATE);
@@ -389,30 +327,17 @@ public class MonitoringService extends IntentService implements SensorEventListe
                             res.add(entry.getKey());
                         }
                     }
-                    //continue;
                 }
-                //
-
-//                res.add(new ProfileList(profileName, Appsnames));
-
             }
-
-//            for (String name : list) {
-//                Log.wtf("sheredfiles", name);
-//            }
-
         }
         return new ArrayList<>(res);
     }
 
     private boolean isProfileCurrentlyActive(String profileName) {
         SharedPreferences sharedPreferences = getSharedPreferences(profileName, MODE_PRIVATE);
-//        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
-//        Date d = new Date();
-//        String dayOfTheWeek = sdf.format(d);
 
-        boolean type = sharedPreferences.getBoolean("type",false);
-        if(type==false) {
+        boolean type = sharedPreferences.getBoolean("type", false);
+        if (type == false) {
 
 
             if (isCurrentDayOftheWeek(sharedPreferences) == false) {
@@ -438,42 +363,24 @@ public class MonitoringService extends IntentService implements SensorEventListe
         }
         //location
         else {
-            float latitude = sharedPreferences.getFloat("latitude",0);
-            float longitude = sharedPreferences.getFloat("longitude",0);
-            float myLocationLatitude= (float) myLocation.getLatitude();
-            float myLocationLongitude= (float) myLocation.getLongitude();
-            if(abs(latitude-myLocationLatitude)<0.00500&&abs(longitude-myLocationLongitude)<0.00500) {
+            float latitude = sharedPreferences.getFloat("latitude", 0);
+            float longitude = sharedPreferences.getFloat("longitude", 0);
+            float myLocationLatitude = (float) myLocation.getLatitude();
+            float myLocationLongitude = (float) myLocation.getLongitude();
+            if (abs(latitude - myLocationLatitude) < 0.00500 && abs(longitude - myLocationLongitude) < 0.00500) {
                 //is in the range
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
 
-        //location
-//        boolean type = sharedPreferences.getBoolean("type",false);
-//        if(type==false) {
-//            //nothing - not map -standard mode
-//            return true;
-//        }
-//        else {
-//            float latitude = sharedPreferences.getFloat("latitude",0);
-//            float longitude = sharedPreferences.getFloat("longitude",0);
-//            float myLocationLatitude= (float) myLocation.getLatitude();
-//            float myLocationLongitude= (float) myLocation.getLongitude();
-//
-//        }
-
-//        return true;
     }
 
-    private boolean isCurrentDayOftheWeek (SharedPreferences sharedPreferences) {
+    private boolean isCurrentDayOftheWeek(SharedPreferences sharedPreferences) {
         Calendar mcurrentTime = Calendar.getInstance();
         int dayOfWeek = mcurrentTime.get(Calendar.DAY_OF_WEEK);
         String weekday = new DateFormatSymbols(Locale.ENGLISH).getWeekdays()[dayOfWeek];
-
-//        String day1 = sharedPreferences.getString("Monday","");
 
         String dayyy;
         dayyy = sharedPreferences.getString("Monday", "");
@@ -516,7 +423,8 @@ public class MonitoringService extends IntentService implements SensorEventListe
         }
         return null;
     }
-    private String getPackageName(String appeName,List<AppList> installedApps) {
+
+    private String getPackageName(String appeName, List<AppList> installedApps) {
         for (AppList appList : installedApps) {
             if (appList.getName().equals(appeName)) {
                 return appList.getPackageName();
@@ -544,94 +452,4 @@ public class MonitoringService extends IntentService implements SensorEventListe
         return ((pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) ? true : false;
     }
 
-
-
-
-/////////////////////////////
-    private ActivityManager.RunningAppProcessInfo getForegroundApp() {
-        ActivityManager.RunningAppProcessInfo result = null, info = null;
-
-        final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-
-        List<ActivityManager.RunningAppProcessInfo> l = activityManager.getRunningAppProcesses();
-        Iterator<ActivityManager.RunningAppProcessInfo> i = l.iterator();
-        while (i.hasNext()) {
-            info = i.next();
-            if (info.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
-                    && !isRunningService(info.processName)) {
-                result = info;
-                break;
-            }
-        }
-        return result;
-    }
-
-    private boolean isRunningService(String processName) {
-        if(processName == null)
-            return false;
-
-        ActivityManager.RunningServiceInfo service;
-
-        final ActivityManager activityManager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
-
-        List <ActivityManager.RunningServiceInfo> l = activityManager.getRunningServices(9999);
-        Iterator <ActivityManager.RunningServiceInfo> i = l.iterator();
-        while(i.hasNext()){
-            service = i.next();
-            if(service.process.equals(processName))
-                return true;
-        }
-        return false;
-    }
-
-    private boolean isRunningApp(String processName) {
-        if(processName == null)
-            return false;
-
-        ActivityManager.RunningAppProcessInfo app;
-
-        final ActivityManager activityManager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
-
-        List <ActivityManager.RunningAppProcessInfo> l = activityManager.getRunningAppProcesses();
-        Iterator <ActivityManager.RunningAppProcessInfo> i = l.iterator();
-        while(i.hasNext()){
-            app = i.next();
-            if(app.processName.equals(processName) && app.importance != ActivityManager.RunningAppProcessInfo.IMPORTANCE_SERVICE)
-                return true;
-        }
-        return false;
-    }
-
-
-    private boolean checkifThisIsActive(ActivityManager.RunningAppProcessInfo target){
-        boolean result = false;
-        ActivityManager.RunningTaskInfo info;
-
-        if(target == null)
-            return false;
-
-        final ActivityManager activityManager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
-
-        List<ActivityManager.RunningTaskInfo> l = activityManager.getRunningTasks(9999);
-        Iterator<ActivityManager.RunningTaskInfo> i = l.iterator();
-
-        while(i.hasNext()){
-            info=i.next();
-            if(info.baseActivity.getPackageName().equals(target.processName)) {
-                result = true;
-                break;
-            }
-        }
-
-        return result;
-    }
-
-
-    // what is in b that is not in a ?
-    public static Collection subtractSets(Collection a, Collection b)
-    {
-        Collection result = new ArrayList(b);
-        result.removeAll(a);
-        return result;
-    }
 }

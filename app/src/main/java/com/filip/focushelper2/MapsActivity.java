@@ -48,11 +48,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent previousIntent = getIntent();
         profileName = previousIntent.getStringExtra("profileName");
         if (profileName == null) {
-            Log.wtf("DSadadsa", "nulllllllllllll");
             profileName = "temp";
             deleteSharedPreferences(profileName);
         }
-        //tutaj albo mam tempa jak jest bez nazwy, albo jest wcześniejsza nazwa
     }
 
 
@@ -70,26 +68,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng positionMy;
         mMap = googleMap;
         getDeviceLocation();
-        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
         if (mLastKnownLocation == null) {
             positionMy = new LatLng(52.218942, 21.011645);
         } else {
             positionMy = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
         }
 
-
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.addMarker(new MarkerOptions().position(positionMy).title("Marker in myPosition"));
-
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(positionMy));
-
         mMap.setMyLocationEnabled(true);
         UiSettings uiSettings = mMap.getUiSettings();
         uiSettings.setCompassEnabled(true);
         uiSettings.setMapToolbarEnabled(true);
-//        uiSettings.setZoomControlsEnabled(true);
     }
 
 

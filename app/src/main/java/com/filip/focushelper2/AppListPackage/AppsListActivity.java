@@ -24,18 +24,9 @@ import java.util.List;
 
 public class AppsListActivity extends AppCompatActivity {
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_apps_list);
-//    }
-
     List<AppList> selectedIteams = new ArrayList<>();
-    //
     ListView userInstalledApps;
     AppAdapter installedAppAdapter;
-    //    List<AppList> installedApps;
-    //
     String profileName;
 
     @Override

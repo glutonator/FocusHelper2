@@ -47,14 +47,12 @@ public class ProfilesListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ProfileList profileList = (ProfileList) profileAdapter.getItem(position);
                 Intent myIntent;
-                if(profileList.isType()==false) {
+                if (profileList.isType() == false) {
                     myIntent = new Intent(ProfilesListActivity.this, ProfileSettingsActivity.class);
-                }
-                else {
+                } else {
                     myIntent = new Intent(ProfilesListActivity.this, ProfileLocationActivity.class);
                 }
                 myIntent.putExtra("profileName", profileList.getProfileName());
-//                startActivity(myIntent);
                 startActivityForResult(myIntent, 0);
             }
         });
@@ -74,9 +72,14 @@ public class ProfilesListActivity extends AppCompatActivity {
             String[] list = prefsdir.list();
             for (String profileName : list) {
                 profileName = profileName.substring(0, (profileName.lastIndexOf(".")));
-                if(profileName.contains("MapviewInitializer")||profileName.contains("com.google.maps.api")) {
+                if (profileName.contains("MapviewInitializer") || profileName.contains("com.google.maps.api")) {
                     continue;
                 }
+                //new
+                if (profileName.contains("_Params")) {
+                    continue;
+                }
+                //
                 SharedPreferences sharedPreferences = getSharedPreferences(profileName, MODE_PRIVATE);
                 Map<String, ?> sharedPreferencesAll = sharedPreferences.getAll();
                 String Appsnames = "";
@@ -85,10 +88,9 @@ public class ProfilesListActivity extends AppCompatActivity {
                     Log.wtf("sheredfiles_apps", entry.getKey() + " " + entry.getValue());
 
                 }
-                SharedPreferences sharedPreferencesParams = getSharedPreferences(profileName+"_Params", MODE_PRIVATE);
-                boolean type = sharedPreferencesParams.getBoolean("type",false);
-                res.add(new ProfileList(profileName, Appsnames,type));
-
+                SharedPreferences sharedPreferencesParams = getSharedPreferences(profileName + "_Params", MODE_PRIVATE);
+                boolean type = sharedPreferencesParams.getBoolean("type", false);
+                res.add(new ProfileList(profileName, Appsnames, type));
             }
 
             for (String name : list) {
@@ -100,18 +102,12 @@ public class ProfilesListActivity extends AppCompatActivity {
     }
 
     public void NewProfile(View view) {
-//        Intent myIntent = new Intent(ProfilesListActivity.this, ProfileSettingsActivity.class);
-
         Intent myIntent = new Intent(ProfilesListActivity.this, ChooseProfileModeActivity.class);
-
-//        myIntent.putExtra("profileName",profileList.getProfileName());
-//        startActivity(myIntent);
         startActivityForResult(myIntent, 0);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
         reload();
     }
 

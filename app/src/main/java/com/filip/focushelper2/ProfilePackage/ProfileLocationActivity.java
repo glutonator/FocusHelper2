@@ -27,11 +27,7 @@ public class ProfileLocationActivity extends AppCompatActivity {
 
         Intent previousIntent = getIntent();
         profileName = previousIntent.getStringExtra("profileName");
-//        if (profileName == null) {
-//            Log.wtf("DSadadsa", "nulllllllllllll");
-//            profileName = "temp";
-//            deleteSharedPreferences(profileName);
-//        }
+
         android.widget.EditText profileNameTextEdit = (android.widget.EditText) findViewById(R.id.editTextProfileName);
         profileNameTextEdit.setText(profileName);
         String profileNameParams = profileName + "_Params";
@@ -108,14 +104,10 @@ public class ProfileLocationActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
         reload();
     }
 
     private void reload() {
-//        finish();
-//        Intent myIntent = new Intent(ProfilesListActivity.this, ProfilesListActivity.class);
-//        startActivity(myIntent);
         android.content.SharedPreferences sharedPreferences;
         if(profileName==null) {
             sharedPreferences = getSharedPreferences("temp" + "_Params", MODE_PRIVATE);
